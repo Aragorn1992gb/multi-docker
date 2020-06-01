@@ -20,10 +20,10 @@ script:
 
 after_success:
     # we have to create a docker build for each project (client, nginx, server, worker folders). We can call it as we want
-    - docker build -t aragorn1992gb/multi-client ./client
-    - docker build -t aragorn1992gb/multi-nginx ./nginx
-    - docker build -t aragorn1992gb/multi-server ./server
-    - docker build -t aragorn1992gb/multi-worker ./worker
+    - docker build -t aragorn1992/multi-client ./client
+    - docker build -t aragorn1992/multi-nginx ./nginx
+    - docker build -t aragorn1992/multi-server ./server
+    - docker build -t aragorn1992/multi-worker ./worker
     # Login to the docker CLI. We have to setting DOCKER_PASSWORD and DOCKER_ID as Environment Variables in Travis-CI. The part before pipe "|" is injected as stdin input to the second part
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
     # Take the images and push them to docker hub
