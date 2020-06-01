@@ -1,0 +1,30 @@
+sudo: required
+
+services:
+    - docker
+
+# build test version of client project and evenutally run test inside it
+before_install:
+    # build dev image for tests. Only develop Dockerfile can do the tests. We have to specify it because of we have a different one for each project
+    # we will overwrite the default Dockerfile.  Build context is on the client dir (./client)
+    - docker build -t aragorn1992gb/react-test -f ./client/Dockerfile.dev ./client
+    # - docker build otherProj... if we have other tests
+
+script:
+    # run test build previously. Use "-- --coverage" in order to stop test (otherwhise it will be in listening for ever)
+    - docker run aragorn1992gb/react-test npm test -- --coverage
+    # docker run otherProj runTheOtherTests... if  we have other tests
+
+after_success:
+    # we have to create a docker build for each project (client, nginx, server, worker folders). We can call it as we want
+    - docker build -t aragorn1992gb/multi-client ./client
+    - docker build -t aragorn1992gb/multi-nginx ./nginx
+    - docker build -t aragorn1992gb/multi-server ./server
+    - docker build -t aragorn1992gb/multi-worker ./worker
+    # Login to the docker CLI. We have to setting DOCKER_PASSWORD and DOCKER_ID as Environment Variables in Travis-CI. The part before pipe "|" is injected as stdin input to the second part
+    echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    # Take the images and push them to docker hub
+    - docker push aragorn1992gb/multi-client
+    - docker push aragorn1992gb/multi-nginx
+    - docker push aragorn1992gb/multi-server
+    - docker push aragorn1992gb/multi-worker
