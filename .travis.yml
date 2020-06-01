@@ -27,7 +27,7 @@ after_success:
     # Login to the docker CLI. We have to setting DOCKER_PASSWORD and DOCKER_ID as Environment Variables in Travis-CI. The part before pipe "|" is injected as stdin input to the second part
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
     # Take the images and push them to docker hub
-    - docker push aragorn1992gb/multi-client
-    - docker push aragorn1992gb/multi-nginx
-    - docker push aragorn1992gb/multi-server
-    - docker push aragorn1992gb/multi-worker
+    - docker push aragorn1992/multi-client
+    - docker push aragorn1992/multi-nginx
+    - docker push aragorn1992/multi-server
+    - docker push aragorn1992/multi-worker
